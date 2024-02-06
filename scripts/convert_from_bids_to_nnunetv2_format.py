@@ -225,6 +225,7 @@ def main(args):
     dataset_id = str(args.DATASETID).zfill(3)
     data_training_path = os.path.join(datapath, "data_axondeepseg_wakehealth_training")
     data_source_path = os.path.join(datapath, "data_axondeepseg_wakehealth_source")
+    data_test_path = data_training_path if args.USE_TRAIN_DIR else data_source_path
 
     out_folder = os.path.join(
         target_dir, "nnUNet_raw", f"Dataset{dataset_id}_{dataset_name}"
@@ -245,7 +246,7 @@ def main(args):
                 )
 
     for subject in train_test_split_dict["test"]:
-        for file in os.listdir(os.path.join(data_source_path, subject, "micr")):
+        for file in os.listdir(os.path.join(data_test_path, subject, "micr")):
             if file.endswith(".tif"):
                 test_participant_to_file_dict.setdefault(subject, []).append(
                     os.path.splitext(file)[0]
@@ -303,7 +304,7 @@ def main(args):
         dataset_name,
     )
     process_images(
-        data_source_path,
+        data_test_path,
         out_folder,
         test_participant_to_file_dict,
         bids_to_nnunet_dict,
@@ -347,6 +348,12 @@ if __name__ == "__main__":
         default=1,
         type=int,
         help="ID of the dataset. This ID is formatted with 3 digits. For example, 1 becomes '001', 23 becomes '023', etc. Defaults to 1",
+    )
+    parser.add_argument(
+        "--USE_TRAIN_DIR",
+        action="store_true",
+        default=False,
+        help="Whether or not the directory used to sample test images from is the 'data_axondeepseg_wakehealth_training' instead of 'data_axondeepseg_wakehealth_source'. Defaults to False.",
     )
     args = parser.parse_args()
     main(args)

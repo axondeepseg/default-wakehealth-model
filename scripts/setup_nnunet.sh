@@ -18,7 +18,7 @@ echo "Converting dataset to nnUNetv2 format"
 echo "-------------------------------------------------------"
 
 # Run the conversion script
-python scripts/convert_from_bids_to_nnunetv2_format.py $PATH_TO_ORIGINAL_DATASET --TARGETDIR $RESULTS_DIR --DATASETID $dataset_id --DATASETNAME $dataset_name
+python scripts/convert_from_bids_to_nnunetv2_format.py $PATH_TO_ORIGINAL_DATASET --TARGETDIR $RESULTS_DIR --DATASETID $dataset_id --DATASETNAME $dataset_name --USE_TRAIN_DIR
 
 # Set up the necessary environment variables
 export nnUNet_raw="$RESULTS_DIR/nnUNet_raw"
